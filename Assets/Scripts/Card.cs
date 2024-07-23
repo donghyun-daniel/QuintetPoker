@@ -1,34 +1,33 @@
 ﻿using System;
 using UnityEngine;
-using System.Security.Cryptography;
 
-public enum Suit
+public enum Color
 {
-    Hearts,
-    Diamonds,
-    Clubs,
-    Spades,
-    Stars // The fifth suit
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+    BLACK
 }
 
 [System.Serializable]
 public class Card
 {
-    public Suit Suit { get; private set; }
+    public Color Color { get; private set; }
     public int Value { get; private set; }
 
-    public Card(Suit suit, int value)
+    public Card(Color color, int value)
     {
-        if (value < 2 || value > 10)
-            throw new ArgumentException("Card value must be between 2 and 10.");
+        if (value < 1 || value > 9)
+            throw new ArgumentException("Card value must be between 1 and 9.");
 
-        Suit = suit;
+        Color = color;
         Value = value;
     }
 
     public override string ToString()
     {
-        return $"{Value} of {Suit}";
+        return $"{Value} of {Color}";
     }
 }
 
@@ -46,13 +45,13 @@ public class Deck
 
     private void InitializeDeck()
     {
-        cards = new Card[45]; // 5 suits * 9 cards each
+        cards = new Card[45]; // 5 colors * 9 cards each
         int index = 0;
-        foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+        foreach (Color color in Enum.GetValues(typeof(Color)))
         {
-            for (int value = 2; value <= 10; value++)
+            for (int value = 1; value <= 9; value++)
             {
-                cards[index] = new Card(suit, value);
+                cards[index] = new Card(color, value);
                 index++;
             }
         }
@@ -60,20 +59,15 @@ public class Deck
 
     public void Shuffle()
     {
-        using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+        System.Random rng = new System.Random();
+        int n = cards.Length;
+        while (n > 1)
         {
-            int n = cards.Length;
-            while (n > 1)
-            {
-                byte[] box = new byte[1];
-                do rng.GetBytes(box);
-                while (!(box[0] < n * (Byte.MaxValue / n)));
-                int k = (box[0] % n);
-                n--;
-                Card temp = cards[k];
-                cards[k] = cards[n];
-                cards[n] = temp;
-            }
+            n--;
+            int k = rng.Next(n + 1);
+            Card temp = cards[k];
+            cards[k] = cards[n];
+            cards[n] = temp;
         }
         currentIndex = 0;
     }

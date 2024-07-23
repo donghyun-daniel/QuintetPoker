@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Deal five community cards (in a real game, you'd reveal these gradually)
+        // Deal five community cards
         for (int i = 0; i < 5; i++)
         {
             communityCards.Add(deck.DrawCard());
@@ -49,6 +49,17 @@ public class GameManager : MonoBehaviour
         foreach (Player player in players)
         {
             Debug.Log($"{player.Name}'s hand: {string.Join(", ", player.Hand)}");
+        }
+
+        EvaluateHands();
+    }
+
+    void EvaluateHands()
+    {
+        foreach (var player in players)
+        {
+            PokerHand hand = HandEvaluator.EvaluateHand(player.Hand, communityCards);
+            Debug.Log($"{player.Name} has: {hand}");
         }
     }
 }
