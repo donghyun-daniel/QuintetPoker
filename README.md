@@ -1,4 +1,3 @@
-cat << EOF > README.md
 # Quintet Poker
 
 A simple poker game using FastAPI and SQLite.
@@ -11,4 +10,3 @@ A simple poker game using FastAPI and SQLite.
 4. Run tests: \`poetry run pytest\`
 5. Format code: \`poetry run black .\`
 6. Lint code: \`poetry run flake8 .\`
-EOF
