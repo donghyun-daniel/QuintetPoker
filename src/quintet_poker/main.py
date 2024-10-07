@@ -3,7 +3,7 @@ import os
 from authlib.integrations.starlette_client import OAuth
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -28,16 +28,14 @@ oauth.register(
 )
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def root():
-    with open("static/index.html", "r") as f:
-        return f.read()
+    return FileResponse("static/index.html")
 
 
-@app.get("/login")
-async def login(request: Request):
-    redirect_uri = request.url_for("auth")
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+@app.get("/settings")
+async def settings():
+    return FileResponse("static/settings.html")
 
 
 @app.get("/auth")
