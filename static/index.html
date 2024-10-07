@@ -7,12 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1c2e4a;
+            --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
-            --container-bg: #233656;
-            --button-bg: #4CAF50;
-            --button-hover: #45a049;
+            --container-bg: #2a2a2a;
+            --button-bg: #3a3a3a;
+            --button-hover: #4a4a4a;
             --heading-color: #ffd700;
+            --toggle-bg: #3a3a3a;
+            --toggle-button: #e0e0e0;
         }
         body {
             font-family: 'Lato', sans-serif;
@@ -23,15 +25,17 @@
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
+            transition: all 0.3s ease;
         }
         body.light-mode {
             --bg-color: #f0f0f0;
             --text-color: #333;
             --container-bg: #ffffff;
-            --button-bg: #4CAF50;
-            --button-hover: #45a049;
-            --heading-color: #1c2e4a;
+            --button-bg: #d0d0d0;
+            --button-hover: #c0c0c0;
+            --heading-color: #1a1a1a;
+            --toggle-bg: #d0d0d0;
+            --toggle-button: #333;
         }
         .container {
             text-align: center;
@@ -41,12 +45,14 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
             max-width: 90%;
             width: 400px;
+            transition: all 0.3s ease;
         }
         h1 {
             font-family: 'Playfair Display', serif;
             color: var(--heading-color);
             font-size: 2.5em;
             margin-bottom: 1em;
+            transition: all 0.3s ease;
         }
         button {
             font-family: 'Lato', sans-serif;
@@ -55,10 +61,10 @@
             font-size: 16px;
             cursor: pointer;
             background-color: var(--button-bg);
-            color: white;
+            color: var(--text-color);
             border: none;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         button:hover {
             background-color: var(--button-hover);
@@ -89,7 +95,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: var(--toggle-bg);
             transition: .4s;
             border-radius: 34px;
         }
@@ -100,26 +106,52 @@
             width: 26px;
             left: 4px;
             bottom: 4px;
-            background-color: white;
+            background-color: var(--toggle-button);
             transition: .4s;
             border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #2196F3;
         }
         input:checked + .slider:before {
             transform: translateX(26px);
         }
-        @media (max-width: 600px) {
+        .language-select {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .language-select:hover {
+            background-color: var(--button-hover);
+        }
+        @media (min-width: 600px) {
             .container {
-                padding: 1rem;
+                width: 500px;
+                padding: 3rem;
             }
             h1 {
-                font-size: 2em;
+                font-size: 3em;
             }
             button {
-                font-size: 14px;
-                padding: 8px 16px;
+                font-size: 18px;
+                padding: 12px 24px;
+                margin: 15px;
+            }
+        }
+        @media (min-width: 1200px) {
+            .container {
+                width: 600px;
+                padding: 4rem;
+            }
+            h1 {
+                font-size: 3.5em;
+            }
+            button {
+                font-size: 20px;
+                padding: 15px 30px;
+                margin: 20px;
             }
         }
     </style>
@@ -146,7 +178,7 @@
             </div>
             <div>
                 <label for="language-select">Language</label>
-                <select id="language-select" onchange="changeLanguage()">
+                <select id="language-select" onchange="changeLanguage()" class="language-select">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
