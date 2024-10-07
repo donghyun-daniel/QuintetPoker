@@ -6,26 +6,45 @@
     <title>Quintet Poker</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #1c2e4a;
+            --text-color: #e0e0e0;
+            --container-bg: #233656;
+            --button-bg: #4CAF50;
+            --button-hover: #45a049;
+            --heading-color: #ffd700;
+        }
         body {
             font-family: 'Lato', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #1c2e4a;
-            color: #e0e0e0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            --bg-color: #f0f0f0;
+            --text-color: #333;
+            --container-bg: #ffffff;
+            --button-bg: #4CAF50;
+            --button-hover: #45a049;
+            --heading-color: #1c2e4a;
         }
         .container {
             text-align: center;
-            background-color: #233656;
+            background-color: var(--container-bg);
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            max-width: 90%;
+            width: 400px;
         }
         h1 {
             font-family: 'Playfair Display', serif;
-            color: #ffd700;
+            color: var(--heading-color);
             font-size: 2.5em;
             margin-bottom: 1em;
         }
@@ -35,18 +54,73 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: var(--button-bg);
             color: white;
             border: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: var(--button-hover);
         }
         #welcome-message {
             font-size: 1.2em;
             margin-bottom: 1em;
+        }
+        #settings-panel {
+            display: none;
+            margin-top: 20px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
@@ -60,9 +134,57 @@
             <p id="welcome-message"></p>
             <button onclick="location.href='/logout'">Logout</button>
         </div>
-        <button onclick="alert('Settings functionality coming soon!')">Settings</button>
+        <button onclick="toggleSettings()">Settings</button>
+        <div id="settings-panel">
+            <h2>Settings</h2>
+            <div>
+                <label for="dark-mode-toggle">Dark Mode</label>
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div>
+                <label for="language-select">Language</label>
+                <select id="language-select" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
+        </div>
     </div>
     <script>
+        function toggleSettings() {
+            const settingsPanel = document.getElementById('settings-panel');
+            settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('light-mode') ? 'false' : 'true');
+        }
+
+        function changeLanguage() {
+            const language = document.getElementById('language-select').value;
+            localStorage.setItem('language', language);
+            // Here you would typically reload the page or update the UI with new language
+            alert('Language changed to ' + language);
+        }
+
+        // Check saved settings on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'false') {
+                document.body.classList.add('light-mode');
+                document.getElementById('dark-mode-toggle').checked = true;
+            }
+
+            const language = localStorage.getItem('language');
+            if (language) {
+                document.getElementById('language-select').value = language;
+            }
+        });
+
         fetch('/user')
             .then(response => response.json())
             .then(data => {
