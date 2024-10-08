@@ -1,22 +1,20 @@
 [tool.poetry]
-name = "quintet-poker"
+name = "quintet_poker"
 version = "0.1.0"
-description = "A simple poker game using FastAPI and SQLite"
-authors = ["Daniel(Donghyun) Sung <donghyun.main@gmail.com>"]
-readme = "README.md"
+description = "A poker game application using Django"
+authors = ["Your Name <your.email@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.12"
-fastapi = "^0.115.0"
-uvicorn = "^0.31.0"
-sqlalchemy = "^2.0.35"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
-black = "^24.8.0"
-flake8 = "^7.1.1"
+python = "^3.9"
+django = "^4.2"
+psycopg2-binary = "^2.9"
+social-auth-app-django = "^5.0"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+server = "python manage.py runserver"
+migrate = "python manage.py migrate"
+makemigrations = "python manage.py makemigrations"
