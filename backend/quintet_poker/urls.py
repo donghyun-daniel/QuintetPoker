@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path("", home, name="home"),  # Add this line for the root URL
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
 ]
